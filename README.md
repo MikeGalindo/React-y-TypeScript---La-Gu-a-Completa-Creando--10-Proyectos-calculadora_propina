@@ -53,7 +53,9 @@ src/
 ├── helpers/
 │   └── index.ts                # formatCurrency con Intl.NumberFormat
 ├── hooks/
-│   └── useOrder.ts             # Estado y acciones del pedido
+│   └── useOrder.ts             # Hook previo al reducer (en desuso, pendiente de eliminar)
+├── reducers/
+│   └── order-reducer.ts        # Estado del pedido, acciones y transiciones
 ├── types/
 │   └── index.ts                # TMenuItem, TOrderItem, TTipOption
 ├── App.tsx                     # Composición de la pantalla
@@ -101,6 +103,13 @@ type TTipOption = {
   label: string;
 };
 ```
+
+## Decisiones de implementación
+
+- **Estado con `useReducer`:** `App` mantiene `{ order, tip }` y `dispatch`; `reducers/order-reducer.ts` concentra las transiciones (`add-item`, `remove-item`, `add-tip`, `place-order`) y los componentes solo emiten acciones.
+- **Acciones tipadas:** `TOrderAcctions` es una unión discriminada por `type`, así TypeScript valida el `payload` en cada llamada a `dispatch`.
+- **`place-order` reinicia a `initialState`:** cerrar la orden limpia pedido y propina en una sola transición.
+- **Cálculos derivados en la vista:** subtotal, propina y total se calculan con `useMemo` a partir de `order` y `tip`; no se guardan en el estado.
 
 ## Próximos pasos
 

@@ -1,10 +1,11 @@
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch } from "react";
 import { tipOptions } from "../data/db";
+import type { TOrderAcctions } from "../reducers/order-reducer";
 interface TipPorcentageForm {
-  setTip: Dispatch<SetStateAction<number>>;
+  dispatch: Dispatch<TOrderAcctions>;
   tip: number;
 }
-const TipPorcentageForm = ({ setTip, tip }: TipPorcentageForm) => {
+const TipPorcentageForm = ({ dispatch, tip }: TipPorcentageForm) => {
   return (
     <div>
       <h3 className="font-black text-2xl">Propina:</h3>
@@ -17,7 +18,12 @@ const TipPorcentageForm = ({ setTip, tip }: TipPorcentageForm) => {
               name="tip"
               id={tipOption.id}
               value={tipOption.value}
-              onChange={(e) => setTip(+e.target.value)}
+              onChange={(e) =>
+                dispatch({
+                  type: "add-tip",
+                  payload: { value: +e.target.value },
+                })
+              }
               checked={tipOption.value === tip}
             />
           </div>
